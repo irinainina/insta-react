@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import InstaService from '../services/instaservice';
 import ErrorMessage from './ErrorMessage';
+import Spinner from './Spinner';
 
 
 export default class Palette extends Component {
@@ -8,11 +9,12 @@ export default class Palette extends Component {
   
   state = {
     photos: [],
-    error: false
+    error: false,
+    spinner: true
   }
-  
+
   componentDidMount() {
-    this.updatePhotos();
+    this.updatePhotos();  
   }
   
   updatePhotos() {
@@ -21,10 +23,11 @@ export default class Palette extends Component {
     .catch(this.onError);
   }
   
-  onPhotosLoaded = (photos) => {
+   onPhotosLoaded = (photos) => {
     this.setState({
       photos,
-      error: false
+      error: false,
+      spinner: false
     })
   }
   
@@ -45,13 +48,18 @@ export default class Palette extends Component {
  
   
   render() {
-    const {error, photos} = this.state;
+    const {error, photos, spinner} = this.state;
     
     if(error) {
       return <ErrorMessage/>
-    }
-    
+    } 
+      
+    if(spinner) {
+      return <Spinner/>
+    } 
+      
     const items = this.renderItems(photos);
+      console.log(items)
       
     return (
       <div className="palette">
